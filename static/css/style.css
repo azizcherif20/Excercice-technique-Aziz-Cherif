@@ -1,0 +1,122 @@
+/* static/css/style.css */
+body {
+    padding-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.table {
+    margin-bottom: 40px;
+}
+
+canvas {
+    margin-top: 20px;
+}
+/* static/css/style.css */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.navbar-brand img {
+    height: 40px;
+}
+
+.banner {
+    background: url('https://www.amiralgestion.com/images/home/home_header.jpg') no-repeat center center;
+    background-size: cover;
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.banner h1 {
+    font-size: 3em;
+}
+
+.banner p {
+    font-size: 1.2em;
+}
+
+.section {
+    padding: 60px 0;
+}
+
+.section h2 {
+    margin-bottom: 20px;
+}
+
+.icon-box {
+    text-align: center;
+    padding: 20px;
+}
+
+.icon-box i {
+    font-size: 3em;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+/* static/css/style.css */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.navbar-brand img {
+    height: 40px;
+}
+
+.navbar-nav .nav-item .nav-link {
+    padding: 10px 20px;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.banner {
+    background: url('/static/images/home_header.jpg') no-repeat center center;
+    background-size: cover;
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.banner h1 {
+    font-size: 3em;
+}
+
+.banner p {
+    font-size: 1.2em;
+}
+
+.section {
+    padding: 60px 0;
+}
+
+.section h2 {
+    margin-bottom: 20px;
+}
+
+.icon-box {
+    text-align: center;
+    padding: 20px;
+}
+
+.icon-box i {
+    font-size: 3em;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}

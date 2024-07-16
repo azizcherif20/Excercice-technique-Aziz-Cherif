@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Positions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            padding-top: 80px; /* Ajout pour aligner le style avec Amiral Gestion */
+        }
+        .navbar-brand img {
+            height: 40px;
+        }
+        .hero-section {
+            background-image: url('{{ url_for('static', filename='images/home_header.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            color: #007bff;
+        }
+        table {
+            margin-bottom: 20px;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        a {
+            color: #007bff;
+        }
+        a:hover {
+            color: #0056b3;
+        }
+        .footer {
+            background-color: #343a40; /* Couleur de fond du footer */
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+        .footer a {
+            color: white; /* Couleur du texte des liens */
+            margin: 0 10px;
+        }
+        .social-icons {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+        .social-icons li {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        .social-icons a {
+            color: white; /* Couleur des icônes */
+            font-size: 1.5em;
+        }
+        .social-icons a:hover {
+            color: #007bff; /* Couleur au survol */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('fonds') }}">Fonds</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('instruments') }}">Instruments</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1>Positions pour le Fond</h1>
+        </div>
+    </div>
+
+    <div class="container section">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Instrument</th>
+                    <th>Quantité</th>
+                    <th>Date d'achat</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for position in positions %}
+                <tr>
+                    <td>{{ position[1] }}</td>
+                    <td>{{ position[2] }}</td>
+                    <td>{{ position[3] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('fonds') }}" class="btn btn-secondary">Retour à la liste des fonds</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-left">
+                <p>&copy; {{ current_year }} Suivi des Portefeuilles. Tous droits réservés.</p>
+            </div>
+            <div class="col-md-6 text-right">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                        <a href="https://www.facebook.com/p/Amiral-Gestion-100067881280842/?paipv=0&eav=AfYO1cLb0xOuyHLrpMmU1O4UWkpxMUV6C09OEmdDEq8JthkMNwAW0RWENPNgxtmUtac&_rdr" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="lien_twitter" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="https://www.linkedin.com/company/amiral-gestion/?originalSubdomain=fr" target="_blank" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+<div></div>
+</html>

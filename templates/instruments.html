@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instruments - Suivi des Portefeuilles</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .section {
+            padding: 60px 0;
+        }
+        .section h2 {
+            margin-bottom: 20px;
+        }
+        .navbar-brand img {
+            height: 40px;
+        }
+        .hero-section {
+            background-image: url('{{ url_for('static', filename='images/home_header.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .hero-section h1 {
+            font-size: 3em;
+        }
+        .table-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .footer {
+            background-color: #343a40; /* Couleur de fond du footer */
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 60px; /* Ajout de marge en haut */
+        }
+        .footer a {
+            color: white; /* Couleur du texte des liens */
+            margin: 0 10px;
+        }
+        .social-icons {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+        .social-icons li {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        .social-icons a {
+            color: white; /* Couleur des icônes */
+            font-size: 1.5em;
+        }
+        .social-icons a:hover {
+            color: #007bff; /* Couleur au survol */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('fonds') }}">Fonds</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('instruments') }}">Instruments</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1>Liste des Instruments</h1>
+        </div>
+    </div>
+
+    <div class="container section">
+        <form method="POST" action="{{ url_for('search_instruments') }}">
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" class="form-control" name="search" placeholder="Rechercher un instrument">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Rechercher</button>
+                </div>
+            </div>
+        </form>
+
+        <table class="table table-bordered table-striped mt-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Performance</th>
+                    <th>Volatilité</th>
+                    <th>Max Drawdown</th>
+                    <th>Historique des Prix</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for instrument in instruments %}
+                <tr>
+                    <td>{{ instrument[1] }}</td>
+                    <td>{{ instrument[2] }}</td>
+                    <td>{{ instrument[3] }}</td>
+                    <td id="perf-{{ instrument[0] }}"></td>
+                    <td id="volat-{{ instrument[0] }}"></td>
+                    <td id="maxdd-{{ instrument[0] }}"></td>
+                    <td>
+                        <canvas id="chart-{{ instrument[0] }}" width="400" height="200"></canvas>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                var canvas = document.getElementById('chart-{{ instrument[0] }}');
+                                fetch("{{ url_for('historique_prix', instrument_id=instrument[0]) }}")
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        var ctx = canvas.getContext('2d');
+                                        var chart = new Chart(ctx, {
+                                            type: 'line',
+                                            data: {
+                                                labels: data.dates,
+                                                datasets: [{
+                                                    label: 'Prix',
+                                                    backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                                                    borderColor: 'rgba(0, 123, 255, 1)',
+                                                    data: data.prix
+                                                }]
+                                            },
+                                            options: {}
+                                        });
+
+                                        // Calculer la performance, la volatilité et le max drawdown
+                                        var prices = data.prix;
+                                        var returns = [];
+                                        var maxPrice = Number.MIN_VALUE;
+                                        var maxDrawdown = 0;
+
+                                        for (var i = 1; i < prices.length; i++) {
+                                            var ret = (prices[i] - prices[i - 1]) / prices[i - 1];
+                                            returns.push(ret);
+
+                                            if (prices[i] > maxPrice) {
+                                                maxPrice = prices[i];
+                                            }
+
+                                            var drawdown = (prices[i] - maxPrice) / maxPrice;
+                                            if (drawdown < maxDrawdown) {
+                                                maxDrawdown = drawdown;
+                                            }
+                                        }
+
+                                        var averageReturn = returns.reduce((a, b) => a + b, 0) / returns.length;
+                                        var volatility = Math.sqrt(returns.map(x => Math.pow(x - averageReturn, 2)).reduce((a, b) => a + b, 0) / returns.length);
+
+                                        // Afficher les valeurs avec flèches
+                                        var perfValue = (averageReturn * 100).toFixed(2);
+                                        var volatValue = (volatility * 100).toFixed(2);
+                                        var maxddValue = (maxDrawdown * 100).toFixed(2);
+
+                                        document.getElementById('perf-{{ instrument[0] }}').innerHTML = `
+                                            ${perfValue}% 
+                                            <i class="fas fa-arrow-${averageReturn >= 0 ? 'up' : 'down'}" style="color: ${averageReturn >= 0 ? 'green' : 'red'};"></i>
+                                        `;
+                                        document.getElementById('volat-{{ instrument[0] }}').innerHTML = `
+                                            ${volatValue}% 
+                                            <i class="fas fa-arrow-${volatility >= 0 ? 'up' : 'down'}" style="color: ${volatility >= 0 ? 'green' : 'red'};"></i>
+                                        `;
+                                        document.getElementById('maxdd-{{ instrument[0] }}').innerHTML = `
+                                            ${maxddValue}% 
+                                            <i class="fas fa-arrow-${maxDrawdown >= 0 ? 'up' : 'down'}" style="color: ${maxDrawdown >= 0 ? 'green' : 'red'};"></i>
+                                        `;
+                                    })
+                                    .catch(error => console.error('Erreur lors de la récupération des données :', error));
+                            });
+                        </script>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">Retour à l'accueil</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-left">
+                <p>&copy; {{ current_year }} Suivi des Portefeuilles. Tous droits réservés.</p>
+            </div>
+            <div class="col-md-6 text-right">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                        <a href="https://www.facebook.com/p/Amiral-Gestion-100067881280842/?paipv=0&eav=AfYO1cLb0xOuyHLrpMmU1O4UWkpxMUV6C09OEmdDEq8JthkMNwAW0RWENPNgxtmUtac&_rdr" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="lien_twitter" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="https://www.linkedin.com/company/amiral-gestion/?originalSubdomain=fr" target="_blank" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fonds - Suivi des Portefeuilles</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .navbar-brand img {
+            height: 40px;
+        }
+        .hero-section {
+            background-image: url('{{ url_for('static', filename='images/home_header.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .hero-section h1 {
+            font-size: 3em;
+        }
+        .fond-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s ease;
+            text-align: center;
+        }
+        .fond-card:hover {
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .fond-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+            color: #007bff;
+        }
+        .fond-card p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .fond-card .btn {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: all 0.3s ease;
+            padding: 10px 20px; /* Ajustement de la taille du bouton */
+            font-size: 0.9em; /* Ajustement de la taille du texte du bouton */
+        }
+        .fond-card .btn:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: scale(1.1);
+        }
+        .fond-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .form-control {
+            height: 40px; /* Réduction de la hauteur du champ de recherche */
+            border-radius: 0; /* Alignement du style avec Amiral Gestion */
+        }
+        .input-group-append .btn {
+            height: 40px; /* Réduction de la hauteur du bouton de recherche */
+            line-height: 1.5;
+            border-radius: 0; /* Alignement du style avec Amiral Gestion */
+        }
+        /* Footer styles */
+        .footer {
+            background-color: #343a40; /* Couleur de fond du footer */
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+        .footer a {
+            color: white; /* Couleur du texte des liens */
+            margin: 0 10px;
+        }
+        .social-icons {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+        .social-icons li {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        .social-icons a {
+            color: white; /* Couleur des icônes */
+            font-size: 1.5em;
+        }
+        .social-icons a:hover {
+            color: #007bff; /* Couleur au survol */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('fonds') }}">Fonds</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('instruments') }}">Instruments</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1>Liste des Fonds</h1>
+        </div>
+    </div>
+
+    <div class="container section">
+        <form method="POST" action="{{ url_for('search_fonds') }}" class="mb-4">
+            <div class="input-group">
+                <input type="text" class="form-control" name="search" placeholder="Rechercher un fond" style="font-size: 0.9em;">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Rechercher</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="row mt-4">
+            {% for fond in fonds %}
+            <div class="col-md-6">
+                <div class="fond-card">
+                    <img src="{{ url_for('static', filename='images/home_header.jpg') }}" alt="Image du fond" class="fond-image">
+                    <h3>{{ fond[1] }}</h3>
+                    <p>{{ fond[2] }}</p>
+                    <a href="{{ url_for('positions', fond_id=fond[0]) }}" class="btn btn-info btn-sm">Voir Positions</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">Retour à l'accueil</a>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-left">
+                    <p>&copy; {{ current_year }} Suivi des Portefeuilles. Tous droits réservés.</p>
+                </div>
+                <div class="col-md-6 text-right">
+                    <ul class="list-inline mb-0 social-icons">
+                        <li class="list-inline-item">
+                            <a href="https://www.facebook.com/p/Amiral-Gestion-100067881280842/?paipv=0&eav=AfYO1cLb0xOuyHLrpMmU1O4UWkpxMUV6C09OEmdDEq8JthkMNwAW0RWENPNgxtmUtac&_rdr" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="lien_twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="https://www.linkedin.com/company/amiral-gestion/?originalSubdomain=fr" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

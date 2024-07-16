@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - Suivi des Portefeuilles</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            padding-top: 80px; /* Ajout pour aligner le style avec Amiral Gestion */
+        }
+        .navbar-brand img {
+            height: 40px;
+        }
+        .banner {
+            background: url('{{ url_for('static', filename='images/home_header.jpg') }}') no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        .banner h1 {
+            font-size: 3em;
+        }
+        .banner p {
+            font-size: 1.2em;
+        }
+        .section {
+            padding: 60px 0;
+        }
+        .section h2 {
+            margin-bottom: 20px;
+        }
+        .icon-box {
+            background: #f8f9fa; /* Couleur de fond similaire à Amiral Gestion */
+            padding: 30px;
+            text-align: center;
+            border: 1px solid #dee2e6; /* Bordure similaire à Amiral Gestion */
+            border-radius: 5px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        .icon-box:hover {
+            transform: translateY(-10px); /* Effet de levée au survol */
+        }
+        .icon-box i {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #007bff; /* Couleur de l'icône similaire à Amiral Gestion */
+        }
+        .icon-box h3 {
+            font-size: 1.5em;
+            color: #007bff; /* Couleur du titre similaire à Amiral Gestion */
+            margin-bottom: 15px;
+        }
+        .icon-box p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .footer {
+            background-color: #343a40; /* Couleur de fond du footer */
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+        .footer a {
+            color: white;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('fonds') }}">Fonds</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('instruments') }}">Instruments</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="banner">
+        <div class="container">
+            <h1>Bienvenue sur notre plateforme de suivi des portefeuilles</h1>
+            <p>Gérez vos investissements de manière efficace et transparente.</p>
+            <a href="{{ url_for('fonds') }}" class="btn btn-primary btn-lg">Voir tous les fonds</a>
+        </div>
+    </div>
+
+    <div class="container section">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="icon-box">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Analyse des Fonds</h3>
+                    <p>Accédez à une vue d'ensemble de tous vos fonds avec des informations détaillées.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="icon-box">
+                    <i class="fas fa-dollar-sign"></i>
+                    <h3>Suivi des Instruments</h3>
+                    <p>Obtenez les dernières informations sur les instruments financiers que vous détenez.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="icon-box">
+                    <i class="fas fa-history"></i>
+                    <h3>Historique des Prix</h3>
+                    <p>Visualisez l'évolution des prix de vos instruments financiers au fil du temps.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-left">
+                <p>&copy; {{ current_year }} Suivi des Portefeuilles. Tous droits réservés.</p>
+            </div>
+            <div class="col-md-6 text-right">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                        <a href="https://www.facebook.com/p/Amiral-Gestion-100067881280842/?paipv=0&eav=AfYO1cLb0xOuyHLrpMmU1O4UWkpxMUV6C09OEmdDEq8JthkMNwAW0RWENPNgxtmUtac&_rdr" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="lien_twitter" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="https://www.linkedin.com/company/amiral-gestion/?originalSubdomain=fr" target="_blank" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</html>
