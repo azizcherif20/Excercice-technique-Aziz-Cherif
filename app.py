@@ -56,7 +56,7 @@ def search_fonds():
     if request.method == 'POST':
         search_query = request.form['search']
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT * FROM referentiel_fonds WHERE nom LIKE %s", ('%' + search_query + '%',))
+        cursor.execute("SELECT * FROM referentiel_fonds WHERE UPPER(nom) or UPPER(description) LIKE UPPER(%s)", ('%' + search_query + '%',))
         fonds = cursor.fetchall()
         return render_template('fonds.html', fonds=fonds)
     return redirect(url_for('fonds'))
@@ -66,7 +66,7 @@ def search_instruments():
     if request.method == 'POST':
         search_query = request.form['search']
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT * FROM referentiel_instruments WHERE nom LIKE %s", ('%' + search_query + '%',))
+        cursor.execute("SELECT * FROM referentiel_instruments WHERE UPPER(nom) LIKE UPPER(%s)", ('%' + search_query + '%',))
         instruments = cursor.fetchall()
         return render_template('instruments.html', instruments=instruments)
     return redirect(url_for('instruments'))
